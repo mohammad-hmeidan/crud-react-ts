@@ -27,10 +27,24 @@ const App = () => {
   };
   /* ------- Local storage -------  */
   let localStorageProductList: IProduct[] = [];
-  if (localStorage.getItem("products") === null) {
-    localStorage.setItem("products", JSON.stringify(productList));
-    localStorageProductList = JSON.parse(localStorage.getItem("products"));
-  } else localStorageProductList = JSON.parse(localStorage.getItem("products"));
+  // if (localStorage.getItem("products") === null) {
+  //   localStorage.setItem("products", JSON.stringify(productList));
+  //   localStorageProductList = JSON.parse(localStorage.getItem("products"));
+  // } else localStorageProductList = JSON.parse(localStorage.getItem("products"));
+  try {
+    const productString = localStorage.getItem("products");
+    if (productString !== null) {
+      localStorageProductList = JSON.parse(productString);
+    } else {
+      localStorage.setItem("products", JSON.stringify(productList));
+      const productString1 = localStorage.getItem("products");
+      if (productString1 !== null) {
+        localStorageProductList = JSON.parse(productString1);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 
   /* ------- STATE -------  */
   const [products, setProducts] = useState<IProduct[]>(localStorageProductList);
